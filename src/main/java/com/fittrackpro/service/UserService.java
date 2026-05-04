@@ -3,6 +3,7 @@ package com.fittrackpro.service;
 import com.fittrackpro.entity.User;
 import com.fittrackpro.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import com.fittrackpro.dto.*;
 
 import java.util.List;
 
@@ -17,10 +18,6 @@ public class UserService {
 
     public User createUser(User user) {
         return userRepository.save(user);
-    }
-
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
     }
 
     public User getUserById(Long id) {
@@ -41,5 +38,33 @@ public class UserService {
 
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
+    }
+
+    public UserResponseDTO createUser(UserRequestDTO dto) {
+        User user = new User();
+
+        user.setName(dto.getName());
+        user.setEmail(dto.getEmail());
+        user.setPassword(dto.getPassword());
+        user.setRole(dto.getRole());
+
+        User savedUser = userRepository.save(user);
+
+        return new UserResponseDTO(
+                savedUser.getId(),
+                savedUser.getName(),
+                savedUser.getEmail(),
+                savedUser.getRole()
+        );
+    }
+    public List<UserResponseDTO> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(user -> new UserResponseDTO(
+                        user.getId(),
+                        user.getName(),
+                        user.getEmail(),
+                        user.getRole()
+                ))
+                .toList();
     }
 }

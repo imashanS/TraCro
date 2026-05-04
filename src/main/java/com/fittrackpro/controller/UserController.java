@@ -1,5 +1,7 @@
 package com.fittrackpro.controller;
 
+import com.fittrackpro.dto.UserRequestDTO;
+import com.fittrackpro.dto.UserResponseDTO;
 import com.fittrackpro.entity.User;
 import com.fittrackpro.service.UserService;
 import jakarta.validation.Valid;
@@ -17,10 +19,16 @@ public class UserController {
         this.userService = userService;
     }
 
+    @PostMapping
+    public UserResponseDTO createUser(@Valid @RequestBody UserRequestDTO user) {
+        return userService.createUser(user);
+    }
+
     @GetMapping
-    public List<User> getAllUsers() {
+    public List<UserResponseDTO> getAllUsers() {
         return userService.getAllUsers();
     }
+
     @GetMapping("/{id}")
     public User getUserById(@PathVariable Long id) {
         return userService.getUserById(id);
@@ -31,10 +39,6 @@ public class UserController {
         userService.deleteUser(id);
     }
 
-    @PostMapping
-    public User createUser(@Valid @RequestBody User user) {
-        return userService.createUser(user);
-    }
 
     @PutMapping("/{id}")
     public User updateUser(@PathVariable Long id, @Valid @RequestBody User user) {

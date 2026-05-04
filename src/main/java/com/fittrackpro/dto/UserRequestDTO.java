@@ -1,20 +1,13 @@
-package com.fittrackpro.entity;
+package com.fittrackpro.dto;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
-@Entity
-@Table(name = "users")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class UserRequestDTO {
 
     @NotBlank(message = "Name is required")
     private String name;
