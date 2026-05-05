@@ -1,5 +1,6 @@
 package com.fittrackpro.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
@@ -7,17 +8,18 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "User request payload")
 public class UserRequestDTO {
 
-    @NotBlank(message = "Name is required")
+    @Schema(example = "Imashan")
     private String name;
 
-    @Email(message = "Invalid email format")
-    @NotBlank(message = "Email is required")
+    @Schema(example = "imashan@gmail.com")
     private String email;
 
-    @NotBlank(message = "Password is required")
+    @Schema(example = "password123")
     private String password;
 
+    @Schema(example = "USER")
     private String role;
 }

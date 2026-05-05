@@ -4,6 +4,7 @@ import com.fittrackpro.dto.UserRequestDTO;
 import com.fittrackpro.dto.UserResponseDTO;
 import com.fittrackpro.entity.User;
 import com.fittrackpro.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -20,11 +21,13 @@ public class UserController {
         this.userService = userService;
     }
 
+    @Operation(summary = "Create a new user")
     @PostMapping
     public UserResponseDTO createUser(@Valid @RequestBody UserRequestDTO user) {
         return userService.createUser(user);
     }
 
+    @Operation(summary ="Get users with pagination")
     @GetMapping
     public Page<UserResponseDTO> getUsers(
             @RequestParam(defaultValue = "0") int page,
@@ -33,11 +36,13 @@ public class UserController {
         return userService.getUsers(page, size);
     }
 
+    @Operation(summary = "Get user by ID")
     @GetMapping("/{id}")
     public UserResponseDTO getUserById(@PathVariable Long id) {
         return userService.getUserById(id);
     }
 
+    @Operation(summary = "Update user")
     @PutMapping("/{id}")
     public UserResponseDTO updateUser(
             @PathVariable Long id,
@@ -46,11 +51,13 @@ public class UserController {
         return userService.updateUser(id, user);
     }
 
+    @Operation(summary ="Delete user")
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
     }
 
+    @Operation(summary ="Search users by name")
     @GetMapping("/search")
     public List<UserResponseDTO> searchUsers(@RequestParam String name) {
         return userService.searchUsers(name);
