@@ -2,8 +2,10 @@ package com.fittrackpro.service;
 
 import com.fittrackpro.entity.User;
 import com.fittrackpro.repository.UserRepository;
-import org.springframework.stereotype.Service;
 import com.fittrackpro.dto.*;
+
+import org.springframework.data.domain.*;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -16,30 +18,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User createUser(User user) {
-        return userRepository.save(user);
-    }
-
-    public User getUserById(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-    }
-
-    public User updateUser(Long id, User updatedUser) {
-        User user = getUserById(id);
-
-        user.setName(updatedUser.getName());
-        user.setEmail(updatedUser.getEmail());
-        user.setPassword(updatedUser.getPassword());
-        user.setRole(updatedUser.getRole());
-
-        return userRepository.save(user);
-    }
-
-    public void deleteUser(Long id) {
-        userRepository.deleteById(id);
-    }
-
+    // CREATE USER
     public UserResponseDTO createUser(UserRequestDTO dto) {
         User user = new User();
 
@@ -57,8 +36,74 @@ public class UserService {
                 savedUser.getRole()
         );
     }
+
+    // GET USER BY ID
+    public UserResponseDTO getUserById(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return new UserResponseDTO(
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getRole()
+        );
+    }
+
+    // UPDATE USER
+    public UserResponseDTO updateUser(Long id, UserRequestDTO dto) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        user.setName(dto.getName());
+        user.setEmail(dto.getEmail());
+        user.setPassword(dto.getPassword());
+        user.setRole(dto.getRole());
+
+        User updatedUser = userRepository.save(user);
+
+        return new UserResponseDTO(
+                updatedUser.getId(),
+                updatedUser.getName(),
+                updatedUser.getEmail(),
+                updatedUser.getRole()
+        );
+    }
+
+    // DELETE USER
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    // GET ALL USERS (optional - not used if pagination is main)
     public List<UserResponseDTO> getAllUsers() {
         return userRepository.findAll().stream()
+                .map(user -> new UserResponseDTO(
+                        user.getId(),
+                        user.getName(),
+                        user.getEmail(),
+                        user.getRole()
+                ))
+                .toList();
+    }
+
+    // PAGINATION
+    public Page<UserResponseDTO> getUsers(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        return userRepository.findAll(pageable)
+                .map(user -> new UserResponseDTO(
+                        user.getId(),
+                        user.getName(),
+                        user.getEmail(),
+                        user.getRole()
+                ));
+    }
+
+    // SEARCH
+    public List<UserResponseDTO> searchUsers(String name) {
+        return userRepository.findByNameContainingIgnoreCase(name)
+                .stream()
                 .map(user -> new UserResponseDTO(
                         user.getId(),
                         user.getName(),
