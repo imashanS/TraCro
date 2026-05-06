@@ -3,7 +3,7 @@ package com.fittrackpro.service;
 import com.fittrackpro.entity.User;
 import com.fittrackpro.repository.UserRepository;
 import com.fittrackpro.dto.*;
-
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +13,12 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository,
+                       PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // CREATE USER
@@ -24,7 +27,7 @@ public class UserService {
 
         user.setName(dto.getName());
         user.setEmail(dto.getEmail());
-        user.setPassword(dto.getPassword());
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
         user.setRole(dto.getRole());
 
         User savedUser = userRepository.save(user);
@@ -112,5 +115,6 @@ public class UserService {
                 ))
                 .toList();
     }
+
 
 }
