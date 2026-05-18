@@ -1,6 +1,8 @@
 package com.fittrackpro.service;
 
 import com.fittrackpro.entity.User;
+import com.fittrackpro.exception.DuplicateEmailException;
+import com.fittrackpro.exception.UserNotFoundException;
 import com.fittrackpro.repository.UserRepository;
 import com.fittrackpro.dto.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +25,10 @@ public class UserService {
 
     // CREATE USER
     public UserResponseDTO createUser(UserRequestDTO dto) {
+
+        if (userRepository.findByEmail(dto.getEmail()).isPresent()) {
+            throw new DuplicateEmailException("Email already exists");
+        }
         User user = new User();
 
         user.setName(dto.getName());
@@ -43,7 +49,7 @@ public class UserService {
     // GET USER BY ID
     public UserResponseDTO getUserById(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         return new UserResponseDTO(
                 user.getId(),
@@ -56,11 +62,11 @@ public class UserService {
     // UPDATE USER
     public UserResponseDTO updateUser(Long id, UserRequestDTO dto) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         user.setName(dto.getName());
         user.setEmail(dto.getEmail());
-        user.setPassword(dto.getPassword());
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
         user.setRole(dto.getRole());
 
         User updatedUser = userRepository.save(user);
