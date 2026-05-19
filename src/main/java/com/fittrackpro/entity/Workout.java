@@ -3,7 +3,7 @@ package com.fittrackpro.entity;
 import jakarta.persistence.*;
 import lombok.*;
 @Entity
-@Table(name == "workouts")
+@Table(name = "workouts")
 @Getter
 @Setter
 @NoArgsConstructor
