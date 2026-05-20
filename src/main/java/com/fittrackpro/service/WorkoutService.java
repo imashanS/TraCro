@@ -141,4 +141,18 @@ public class WorkoutService {
                 ))
                 .toList();
     }
+    public List<WorkoutResponseDTO> getWorkoutsByUser(Long userId) {
+
+        return workoutRepository.findByUserId(userId)
+                .stream()
+                .map(workout -> new WorkoutResponseDTO(
+                        workout.getId(),
+                        workout.getExerciseName(),
+                        workout.getSets(),
+                        workout.getReps(),
+                        workout.getWeight(),
+                        workout.getWorkoutDate()
+                ))
+                .toList();
+    }
 }

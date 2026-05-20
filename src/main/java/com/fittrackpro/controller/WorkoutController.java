@@ -62,4 +62,11 @@ public class WorkoutController {
     ) {
         return workoutService.searchWorkouts(exercise);
     }
+
+    @GetMapping("/user/{userId}")
+    public List<WorkoutResponseDTO> getWorkoutsByUser(
+            @PathVariable Long userId
+    ) {
+        return workoutService.getWorkoutsByUser(userId);
+    }
 }
