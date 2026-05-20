@@ -4,6 +4,7 @@ import com.fittrackpro.dto.WorkoutRequestDTO;
 import com.fittrackpro.dto.WorkoutResponseDTO;
 import com.fittrackpro.service.WorkoutService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,8 +27,15 @@ public class WorkoutController {
     }
 
     @GetMapping
-    public List<WorkoutResponseDTO> getAllWorkouts() {
-        return workoutService.getAllWorkouts();
+    public Page<WorkoutResponseDTO> getAllWorkouts(
+
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "workoutDate") String sortBy
+
+    ) {
+
+        return workoutService.getAllWorkouts(page, size, sortBy);
     }
 
     @GetMapping("/{id}")

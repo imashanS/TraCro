@@ -4,6 +4,10 @@ import com.fittrackpro.dto.WorkoutRequestDTO;
 import com.fittrackpro.dto.WorkoutResponseDTO;
 import com.fittrackpro.entity.Workout;
 import com.fittrackpro.repository.WorkoutRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,10 +45,19 @@ public class WorkoutService {
     }
 
     // GET ALL WORKOUTS
-    public List<WorkoutResponseDTO> getAllWorkouts() {
+    public Page<WorkoutResponseDTO> getAllWorkouts(
+            int page,
+            int size,
+            String sortBy
+    ) {
 
-        return workoutRepository.findAll()
-                .stream()
+        Pageable pageable = PageRequest.of(
+                page,
+                size,
+                Sort.by(sortBy).descending()
+        );
+
+        return workoutRepository.findAll(pageable)
                 .map(workout -> new WorkoutResponseDTO(
                         workout.getId(),
                         workout.getExerciseName(),
@@ -52,8 +65,7 @@ public class WorkoutService {
                         workout.getReps(),
                         workout.getWeight(),
                         workout.getWorkoutDate()
-                ))
-                .toList();
+                ));
     }
 
     // GET WORKOUT BY ID
