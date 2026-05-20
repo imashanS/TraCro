@@ -52,4 +52,47 @@ public class WorkoutService {
                 ))
                 .toList();
     }
+
+    // GET WORKOUT BY ID
+    public WorkoutResponseDTO getWorkoutById(Long id) {
+
+        Workout workout = workoutRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Workout not found"));
+
+        return new WorkoutResponseDTO(
+                workout.getId(),
+                workout.getExerciseName(),
+                workout.getSets(),
+                workout.getReps(),
+                workout.getWeight()
+        );
+    }
+
+    // UPDATE WORKOUT
+    public WorkoutResponseDTO updateWorkout(Long id, WorkoutRequestDTO dto) {
+
+        Workout workout = workoutRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Workout not found"));
+
+        workout.setExerciseName(dto.getExerciseName());
+        workout.setSets(dto.getSets());
+        workout.setReps(dto.getReps());
+        workout.setWeight(dto.getWeight());
+
+        Workout updatedWorkout = workoutRepository.save(workout);
+
+        return new WorkoutResponseDTO(
+                updatedWorkout.getId(),
+                updatedWorkout.getExerciseName(),
+                updatedWorkout.getSets(),
+                updatedWorkout.getReps(),
+                updatedWorkout.getWeight()
+        );
+    }
+
+    // DELETE WORKOUT
+    public void deleteWorkout(Long id) {
+
+        workoutRepository.deleteById(id);
+    }
 }
