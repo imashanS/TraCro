@@ -55,4 +55,11 @@ public class WorkoutController {
     public void deleteWorkout(@PathVariable Long id) {
         workoutService.deleteWorkout(id);
     }
+
+    @GetMapping("/search")
+    public List<WorkoutResponseDTO> searchWorkouts(
+            @RequestParam String exercise
+    ) {
+        return workoutService.searchWorkouts(exercise);
+    }
 }

@@ -113,4 +113,19 @@ public class WorkoutService {
 
         workoutRepository.deleteById(id);
     }
+    public List<WorkoutResponseDTO> searchWorkouts(String exerciseName) {
+
+        return workoutRepository
+                .findByExerciseNameContainingIgnoreCase(exerciseName)
+                .stream()
+                .map(workout -> new WorkoutResponseDTO(
+                        workout.getId(),
+                        workout.getExerciseName(),
+                        workout.getSets(),
+                        workout.getReps(),
+                        workout.getWeight(),
+                        workout.getWorkoutDate()
+                ))
+                .toList();
+    }
 }
