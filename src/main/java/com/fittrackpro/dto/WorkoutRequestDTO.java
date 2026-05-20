@@ -24,4 +24,6 @@ public class WorkoutRequestDTO {
 
     @NotNull
     private LocalDate workoutDate;
+
+    private Long userId;
 }

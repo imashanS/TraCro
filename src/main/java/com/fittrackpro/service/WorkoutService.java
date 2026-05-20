@@ -9,6 +9,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import com.fittrackpro.repository.UserRepository;
+import com.fittrackpro.entity.User;
 
 import java.util.List;
 
@@ -17,8 +19,14 @@ public class WorkoutService {
 
     private final WorkoutRepository workoutRepository;
 
-    public WorkoutService(WorkoutRepository workoutRepository) {
+    private final UserRepository userRepository;
+
+    public WorkoutService(
+            WorkoutRepository workoutRepository,
+            UserRepository userRepository
+    ) {
         this.workoutRepository = workoutRepository;
+        this.userRepository = userRepository;
     }
 
     // CREATE WORKOUT
@@ -31,6 +39,11 @@ public class WorkoutService {
         workout.setReps(dto.getReps());
         workout.setWeight(dto.getWeight());
         workout.setWorkoutDate(dto.getWorkoutDate());
+
+        User user = userRepository.findById(dto.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        workout.setUser(user);
 
         Workout savedWorkout = workoutRepository.save(workout);
 
