@@ -26,6 +26,7 @@ public class WorkoutService {
         workout.setSets(dto.getSets());
         workout.setReps(dto.getReps());
         workout.setWeight(dto.getWeight());
+        workout.setWorkoutDate(dto.getWorkoutDate());
 
         Workout savedWorkout = workoutRepository.save(workout);
 
@@ -34,7 +35,8 @@ public class WorkoutService {
                 savedWorkout.getExerciseName(),
                 savedWorkout.getSets(),
                 savedWorkout.getReps(),
-                savedWorkout.getWeight()
+                savedWorkout.getWeight(),
+                savedWorkout.getWorkoutDate()
         );
     }
 
@@ -48,7 +50,8 @@ public class WorkoutService {
                         workout.getExerciseName(),
                         workout.getSets(),
                         workout.getReps(),
-                        workout.getWeight()
+                        workout.getWeight(),
+                        workout.getWorkoutDate()
                 ))
                 .toList();
     }
@@ -64,7 +67,8 @@ public class WorkoutService {
                 workout.getExerciseName(),
                 workout.getSets(),
                 workout.getReps(),
-                workout.getWeight()
+                workout.getWeight(),
+                workout.getWorkoutDate()
         );
     }
 
@@ -78,6 +82,7 @@ public class WorkoutService {
         workout.setSets(dto.getSets());
         workout.setReps(dto.getReps());
         workout.setWeight(dto.getWeight());
+        workout.setWorkoutDate(dto.getWorkoutDate());
 
         Workout updatedWorkout = workoutRepository.save(workout);
 
@@ -86,7 +91,8 @@ public class WorkoutService {
                 updatedWorkout.getExerciseName(),
                 updatedWorkout.getSets(),
                 updatedWorkout.getReps(),
-                updatedWorkout.getWeight()
+                updatedWorkout.getWeight(),
+                updatedWorkout.getWorkoutDate()
         );
     }
 

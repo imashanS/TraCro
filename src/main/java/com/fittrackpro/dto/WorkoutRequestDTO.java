@@ -4,6 +4,8 @@ import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 public class WorkoutRequestDTO {
@@ -19,4 +21,7 @@ public class WorkoutRequestDTO {
 
     @Positive
     private double weight;
+
+    @NotNull
+    private LocalDate workoutDate;
 }

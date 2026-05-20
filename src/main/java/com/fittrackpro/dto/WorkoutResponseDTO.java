@@ -3,6 +3,8 @@ package com.fittrackpro.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.LocalDate;
+
 @Getter
 @AllArgsConstructor
 public class WorkoutResponseDTO {
@@ -12,4 +14,5 @@ public class WorkoutResponseDTO {
     private int sets;
     private int reps;
     private double weight;
+    private LocalDate workoutDate;
 }
