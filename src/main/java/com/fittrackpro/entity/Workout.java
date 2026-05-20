@@ -12,16 +12,23 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 
-
 public class Workout {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long id;
+
     private String exerciseName;
+
     private int sets;
+
     private int reps;
+
     private double weight;
+
     private LocalDate workoutDate;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }
