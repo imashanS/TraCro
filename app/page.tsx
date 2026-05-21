@@ -1,5 +1,33 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import axios from "axios";
+
 export default function Home() {
+
+  const [dashboard, setDashboard] = useState({
+    totalWorkouts: 0,
+    totalVolume: 0,
+    latestWeight: 0,
+    recentWorkoutCount: 0,
+    latestExercise: "",
+  });
+
+  useEffect(() => {
+
+    axios
+        .get("http://localhost:8080/api/dashboard/1")
+        .then((response) => {
+          setDashboard(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
+  }, []);
+
   return (
+
       <main className="min-h-screen bg-gray-100 p-8">
 
         <h1 className="text-4xl font-bold mb-6">
@@ -14,7 +42,7 @@ export default function Home() {
             </h2>
 
             <p className="text-3xl mt-4">
-              12
+              {dashboard.totalWorkouts}
             </p>
           </div>
 
@@ -24,7 +52,7 @@ export default function Home() {
             </h2>
 
             <p className="text-3xl mt-4">
-              68 kg
+              {dashboard.latestWeight} kg
             </p>
           </div>
 
@@ -34,7 +62,7 @@ export default function Home() {
             </h2>
 
             <p className="text-3xl mt-4">
-              24000
+              {dashboard.totalVolume}
             </p>
           </div>
 
