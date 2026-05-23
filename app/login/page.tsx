@@ -1,11 +1,31 @@
 "use client";
 
 import { useState } from "react";
+import axios from "axios";
 
 export default function LoginPage() {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const handleLogin = async () => {
+
+        try {
+
+            const response = await axios.post(
+                "http://localhost:8080/api/auth/login",
+                {
+                    email,
+                    password,
+                }
+            );
+
+            console.log(response.data);
+
+        } catch (error) {
+
+            console.error(error);
+        }
+    };
 
     return (
 
@@ -40,6 +60,7 @@ export default function LoginPage() {
                     />
 
                     <button
+                        onClick={handleLogin}
                         className="w-full bg-white text-black p-4 rounded-xl font-semibold hover:bg-gray-200 transition"
                     >
                         Login
