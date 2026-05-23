@@ -19,11 +19,16 @@ export default function LoginPage() {
                 }
             );
 
-            console.log(response.data);
+            localStorage.setItem(
+                "token",
+                response.data.token
+            );
 
-        } catch (error) {
+            window.location.href = "/dashboard";
 
-            console.error(error);
+        } catch (error: any) {
+
+            console.log(error.response?.data);
         }
     };
 

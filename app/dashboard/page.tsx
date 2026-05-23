@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function DashboardPage() {
 
+    const router = useRouter();
     const [dashboard, setDashboard] = useState({
         totalWorkouts: 0,
         totalVolume: 0,
@@ -15,6 +17,13 @@ export default function DashboardPage() {
 
     useEffect(() => {
 
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            router.push("/login");
+            return;
+        }
+
         axios
             .get("http://localhost:8080/api/dashboard/1")
             .then((response) => {
@@ -24,7 +33,7 @@ export default function DashboardPage() {
                 console.error(error);
             });
 
-    }, []);
+    }, [router]);
 
     return (
 
