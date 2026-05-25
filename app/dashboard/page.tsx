@@ -24,8 +24,14 @@ export default function DashboardPage() {
             return;
         }
 
-        axios
-            .get("http://localhost:8080/api/dashboard/1")
+        axios.get(
+            "http://localhost:8080/api/dashboard/1",
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        )
             .then((response) => {
                 setDashboard(response.data);
             })

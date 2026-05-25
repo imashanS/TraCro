@@ -20,6 +20,11 @@ export default function Navbar() {
         return () => window.removeEventListener("scroll", onScroll);
     }, []);
 
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        window.location.href = "/login";
+    };
+
     return (
         <header
             className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
@@ -32,7 +37,7 @@ export default function Navbar() {
                 <div className="flex items-center justify-between h-16 lg:h-20">
 
                     {/* Logo */}
-                    <Link href="/" className="flex items-center gap-2.5 group">
+                    <Link href="/public" className="flex items-center gap-2.5 group">
                         {/* Icon mark */}
                         <div className="w-8 h-8 relative flex items-center justify-center">
                             <div className="absolute inset-0 bg-[#e8ff47] rounded-sm rotate-12 group-hover:rotate-45 transition-transform duration-500" />
@@ -98,8 +103,11 @@ export default function Navbar() {
                         </Link>
                     ))}
                     <div className="pt-2 flex flex-col gap-3">
-                        <button className="text-sm font-medium text-white/60 hover:text-white transition-colors text-left">
-                            Log In
+                        <button
+                            onClick={handleLogout}
+                            className="text-sm font-medium text-white/60 hover:text-red-400 transition-colors duration-200 tracking-wide"
+                        >
+                            Logout
                         </button>
                         <button className="btn-primary w-full py-3 rounded-full bg-[#e8ff47] text-black text-sm font-semibold tracking-wide">
                             Get Started
