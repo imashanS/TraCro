@@ -7,6 +7,10 @@ import DashboardNavbar from "@/components/dashboard/DashboardNavbar";
 export default function WorkoutsPage() {
 
     const [workouts, setWorkouts] = useState([]);
+    const [exerciseName, setExerciseName] = useState("");
+    const [sets, setSets] = useState(0);
+    const [reps, setReps] = useState(0);
+    const [weight, setWeight] = useState(0);
 
     useEffect(() => {
 
@@ -29,6 +33,37 @@ export default function WorkoutsPage() {
 
     }, []);
 
+    const handleCreateWorkout = async () => {
+
+        const token = localStorage.getItem("token");
+
+        try {
+
+            await axios.post(
+                "http://localhost:8080/api/workouts",
+                {
+                    exerciseName,
+                    sets,
+                    reps,
+                    weight,
+                    workoutDate: "2026-05-25",
+                    userId: 1,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            window.location.reload();
+
+        } catch (error) {
+
+            console.log(error);
+        }
+    };
+
     return (
 
         <>
@@ -42,6 +77,53 @@ export default function WorkoutsPage() {
                 </h1>
 
                 <div className="overflow-x-auto">
+
+                    <div className="bg-white/5 p-6 rounded-2xl mb-8">
+
+                        <h2 className="text-2xl font-bold mb-6">
+                            Add Workout
+                        </h2>
+
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+
+                            <input
+                                type="text"
+                                placeholder="Exercise"
+                                className="p-3 rounded-xl bg-black border border-white/10"
+                                onChange={(e) => setExerciseName(e.target.value)}
+                            />
+
+                            <input
+                                type="number"
+                                placeholder="Sets"
+                                className="p-3 rounded-xl bg-black border border-white/10"
+                                onChange={(e) => setSets(Number(e.target.value))}
+                            />
+
+                            <input
+                                type="number"
+                                placeholder="Reps"
+                                className="p-3 rounded-xl bg-black border border-white/10"
+                                onChange={(e) => setReps(Number(e.target.value))}
+                            />
+
+                            <input
+                                type="number"
+                                placeholder="Weight"
+                                className="p-3 rounded-xl bg-black border border-white/10"
+                                onChange={(e) => setWeight(Number(e.target.value))}
+                            />
+
+                        </div>
+
+                        <button
+                            onClick={handleCreateWorkout}
+                            className="mt-6 bg-[#e8ff47] text-black px-6 py-3 rounded-xl font-semibold"
+                        >
+                            Create Workout
+                        </button>
+
+                    </div>
 
                     <table className="w-full border border-white/10">
 
