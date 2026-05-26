@@ -72,4 +72,14 @@ public class WorkoutController {
         String email = authentication.getName(); // extracted from JWT
         return workoutService.createWorkout(dto, email);
     }
+
+    @GetMapping("/my")
+    public List<WorkoutResponseDTO> getMyWorkouts(
+            Authentication authentication
+    ) {
+
+        String email = authentication.getName();
+
+        return workoutService.getWorkoutsByUserEmail(email);
+    }
 }

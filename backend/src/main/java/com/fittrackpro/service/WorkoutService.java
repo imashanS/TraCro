@@ -150,4 +150,24 @@ public class WorkoutService {
                 saved.getWorkoutDate()
         );
     }
+    public List<WorkoutResponseDTO> getWorkoutsByUserEmail(
+            String email
+    ) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new RuntimeException("User not found"));
+
+        return workoutRepository.findByUserId(user.getId())
+                .stream()
+                .map(workout -> new WorkoutResponseDTO(
+                        workout.getId(),
+                        workout.getExerciseName(),
+                        workout.getSets(),
+                        workout.getReps(),
+                        workout.getWeight(),
+                        workout.getWorkoutDate()
+                ))
+                .toList();
+    }
 }
