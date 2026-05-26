@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/workouts")
@@ -81,5 +82,15 @@ public class WorkoutController {
         String email = authentication.getName();
 
         return workoutService.getWorkoutsByUserEmail(email);
+    }
+
+    @GetMapping("/analytics")
+    public Map<String, Object> getWorkoutAnalytics(
+            Authentication authentication
+    ) {
+
+        String email = authentication.getName();
+
+        return workoutService.getWorkoutAnalytics(email);
     }
 }

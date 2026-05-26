@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 import com.fittrackpro.repository.UserRepository;
 import com.fittrackpro.entity.User;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class WorkoutService {
@@ -169,5 +171,47 @@ public class WorkoutService {
                         workout.getWorkoutDate()
                 ))
                 .toList();
+    }
+    public Map<String, Object> getWorkoutAnalytics(
+            String email
+    ) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new RuntimeException("User not found"));
+
+        List<Workout> workouts =
+                workoutRepository.findByUserId(user.getId());
+
+        int totalWorkouts = workouts.size();
+
+        double totalVolume = workouts.stream()
+                .mapToDouble(w ->
+                        w.getSets() *
+                                w.getReps() *
+                                w.getWeight())
+                .sum();
+
+        String latestExercise =
+                workouts.isEmpty()
+                        ? "No workouts"
+                        : workouts.get(workouts.size() - 1)
+                        .getExerciseName();
+
+        double latestWeight =
+                workouts.isEmpty()
+                        ? 0
+                        : workouts.get(workouts.size() - 1)
+                        .getWeight();
+
+        Map<String, Object> analytics =
+                new HashMap<>();
+
+        analytics.put("totalWorkouts", totalWorkouts);
+        analytics.put("totalVolume", totalVolume);
+        analytics.put("latestExercise", latestExercise);
+        analytics.put("latestWeight", latestWeight);
+
+        return analytics;
     }
 }
