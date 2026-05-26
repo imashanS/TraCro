@@ -29,34 +29,6 @@ public class WorkoutService {
         this.userRepository = userRepository;
     }
 
-    // CREATE WORKOUT
-    public WorkoutResponseDTO createWorkout(WorkoutRequestDTO dto) {
-
-        Workout workout = new Workout();
-
-        workout.setExerciseName(dto.getExerciseName());
-        workout.setSets(dto.getSets());
-        workout.setReps(dto.getReps());
-        workout.setWeight(dto.getWeight());
-        workout.setWorkoutDate(dto.getWorkoutDate());
-
-        User user = userRepository.findById(dto.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        workout.setUser(user);
-
-        Workout savedWorkout = workoutRepository.save(workout);
-
-        return new WorkoutResponseDTO(
-                savedWorkout.getId(),
-                savedWorkout.getExerciseName(),
-                savedWorkout.getSets(),
-                savedWorkout.getReps(),
-                savedWorkout.getWeight(),
-                savedWorkout.getWorkoutDate()
-        );
-    }
-
     // GET ALL WORKOUTS
     public Page<WorkoutResponseDTO> getAllWorkouts(
             int page,
@@ -154,5 +126,28 @@ public class WorkoutService {
                         workout.getWorkoutDate()
                 ))
                 .toList();
+    }
+
+    public WorkoutResponseDTO createWorkout(WorkoutRequestDTO dto, String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Workout workout = new Workout();
+        workout.setExerciseName(dto.getExerciseName());
+        workout.setSets(dto.getSets());
+        workout.setReps(dto.getReps());
+        workout.setWeight(dto.getWeight());
+        workout.setWorkoutDate(dto.getWorkoutDate());
+        workout.setUser(user);
+
+        Workout saved = workoutRepository.save(workout);
+        return new WorkoutResponseDTO(
+                saved.getId(),
+                saved.getExerciseName(),
+                saved.getSets(),
+                saved.getReps(),
+                saved.getWeight(),
+                saved.getWorkoutDate()
+        );
     }
 }

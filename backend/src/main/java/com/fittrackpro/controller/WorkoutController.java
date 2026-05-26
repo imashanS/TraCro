@@ -6,7 +6,8 @@ import com.fittrackpro.service.WorkoutService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import java.util.List;
 
 @RestController
@@ -17,13 +18,6 @@ public class WorkoutController {
 
     public WorkoutController(WorkoutService workoutService) {
         this.workoutService = workoutService;
-    }
-
-    @PostMapping
-    public WorkoutResponseDTO createWorkout(
-            @Valid @RequestBody WorkoutRequestDTO dto
-    ) {
-        return workoutService.createWorkout(dto);
     }
 
     @GetMapping
@@ -68,5 +62,14 @@ public class WorkoutController {
             @PathVariable Long userId
     ) {
         return workoutService.getWorkoutsByUser(userId);
+    }
+
+    @PostMapping
+    public WorkoutResponseDTO createWorkout(
+            @Valid @RequestBody WorkoutRequestDTO dto,
+            Authentication authentication
+    ) {
+        String email = authentication.getName(); // extracted from JWT
+        return workoutService.createWorkout(dto, email);
     }
 }
