@@ -24,6 +24,7 @@ public class UserService {
     }
 
     // CREATE USER
+
     public UserResponseDTO createUser(UserRequestDTO dto) {
 
         if (userRepository.findByEmail(dto.getEmail()).isPresent()) {
@@ -120,6 +121,44 @@ public class UserService {
                         user.getRole()
                 ))
                 .toList();
+    }
+
+    public UserResponseDTO getUserByEmail(
+            String email
+    ) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new RuntimeException("User not found"));
+
+        return new UserResponseDTO(
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getRole()
+        );
+    }
+
+    public UserResponseDTO updateCurrentUser(
+            String email,
+            UserRequestDTO dto
+    ) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new RuntimeException("User not found"));
+
+        user.setName(dto.getName());
+        user.setEmail(dto.getEmail());
+
+        User updatedUser = userRepository.save(user);
+
+        return new UserResponseDTO(
+                updatedUser.getId(),
+                updatedUser.getName(),
+                updatedUser.getEmail(),
+                updatedUser.getRole()
+        );
     }
 
 

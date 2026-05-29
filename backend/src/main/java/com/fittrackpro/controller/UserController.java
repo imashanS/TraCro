@@ -7,6 +7,7 @@ import com.fittrackpro.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -62,4 +63,26 @@ public class UserController {
     public List<UserResponseDTO> searchUsers(@RequestParam String name) {
         return userService.searchUsers(name);
     }
+
+    @GetMapping("/me")
+    public UserResponseDTO getCurrentUser(
+            Authentication authentication
+    ) {
+
+        String email = authentication.getName();
+
+        return userService.getUserByEmail(email);
+    }
+
+    @PutMapping("/me")
+    public UserResponseDTO updateCurrentUser(
+            Authentication authentication,
+            @RequestBody UserRequestDTO dto
+    ) {
+
+        String email = authentication.getName();
+
+        return userService.updateCurrentUser(email, dto);
+    }
+
 }
